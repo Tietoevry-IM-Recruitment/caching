@@ -33,7 +33,7 @@ You are given a REST API that needs refactoring. The API is slow and you are tas
 
 ```mermaid
 sequenceDiagram
-    actor User
+    actor User as REST API Client
     participant UserResource
     participant UserServiceClient
 
