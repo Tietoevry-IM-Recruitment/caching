@@ -33,17 +33,17 @@ You are given a REST API that needs refactoring. The API is slow and you are tas
 
 ```mermaid
 sequenceDiagram
-    participant User
+    actor User
     participant UserResource
     participant UserServiceClient
 
-    Note over User: Endpoint 1 - HTTP GET of all users
+    Note over User: Endpoint 1 - Listing all users
     User ->> UserResource: getAllUsers()
     UserResource ->> UserServiceClient: getUsers()
     UserServiceClient -->> UserResource: Return list of users
     UserResource -->> User: Return HTTP 200 with list of users
 
-    Note over User: Endpoint 2 - HTTP GET of single user by :id
+    Note over User: Endpoint 2 - Getting a specific user
     User ->> UserResource: getUser(:id)
     UserResource ->> UserServiceClient: getUsers()
     UserServiceClient -->> UserResource: Return list of users
