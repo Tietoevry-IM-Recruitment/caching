@@ -31,6 +31,31 @@ You are given a REST API that needs refactoring. The API is slow and you are tas
   - Endpoint for getting a specific user by looping through all users looking for a matching ID
 - The [UserServiceClient](./caching/src/main/java/org/tietoevry/UserServiceClient.java) is our client that calls an External API on the Internet to [fetch users](https://jsonplaceholder.typicode.com/users).
 
+```mermaid
+sequenceDiagram
+    participant User
+    participant UserResource
+    participant UserServiceClient
+
+    Note over User: Endpoint 1 - HTTP GET of all users
+    User ->> UserResource: getAllUsers()
+    UserResource ->> UserServiceClient: getUsers()
+    UserServiceClient -->> UserResource: Return list of users
+    UserResource -->> User: Return HTTP 200 with list of users
+
+    Note over User: Endpoint 2 - HTTP GET of single user by :id
+    User ->> UserResource: getUser(:id)
+    UserResource ->> UserServiceClient: getUsers()
+    UserServiceClient -->> UserResource: Return list of users
+    loop
+        UserResource ->> UserResource: Look for user with :id
+    end
+    UserResource -->> User: Return HTTP 200 with the user when found
+    break If user was not found
+        UserResource -->> User: Return HTTP 404 not found
+    end
+```
+
 ## Requirements
 - Continue using our Quarkus app as the framework and Java as the language
 - Add a caching layer to the REST API with the following requirements :
@@ -42,9 +67,7 @@ You are given a REST API that needs refactoring. The API is slow and you are tas
 - In case of doubt, come up with a solution of your choice.
 - This task should take you maximum 1-2 hours.
 
-
 ## Example responses from our REST API endpoints
-
 Return all users in an array :
 ```shell
 curl http://localhost:8080/users
